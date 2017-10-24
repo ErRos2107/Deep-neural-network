@@ -323,8 +323,9 @@ class LeakyReluLayer(Layer):
 
         For inputs `x` and outputs `y` this corresponds to `y = max(0, x)`.
         """
-        outputs = inputs #remove and replace with your code
-        return outputs
+        alpha=0.01
+
+        return np.where(inputs>0., inputs, alpha*inputs)
 
     def bprop(self, inputs, outputs, grads_wrt_outputs):
         """Back propagates gradients through a layer.
@@ -332,8 +333,8 @@ class LeakyReluLayer(Layer):
         Given gradients with respect to the outputs of the layer calculates the
         gradients with respect to the layer inputs.
         """
-        gradients = inputs #remove and replace with your code
-        return gradients
+        alpha=0.01
+        return np.where(inputs>0., 1, alpha) * grads_wrt_outputs
 
     def __repr__(self):
         return 'LeakyReluLayer'
@@ -346,8 +347,8 @@ class ELULayer(Layer):
 
         For inputs `x` and outputs `y` this corresponds to `y = max(0, x)`.
         """
-        outputs = inputs #remove and replace with your code
-        return outputs
+        alpha = 1
+        return np.where(inputs>0., inputs, alpha*(np.exp(inputs)-1))
 
     def bprop(self, inputs, outputs, grads_wrt_outputs):
         """Back propagates gradients through a layer.
@@ -355,8 +356,8 @@ class ELULayer(Layer):
         Given gradients with respect to the outputs of the layer calculates the
         gradients with respect to the layer inputs.
         """
-        gradients = inputs #remove and replace with your code
-        return gradients
+        alpha=1
+        return np.where(inputs>0., 1, alpha*np.exp(inputs)) * grads_wrt_outputs
 
     def __repr__(self):
         return 'ELULayer'
@@ -370,8 +371,8 @@ class SELULayer(Layer):
 
         For inputs `x` and outputs `y` this corresponds to `y = max(0, x)`.
         """
-        outputs = inputs #remove and replace with your code
-        return outputs
+        alpha = 1.6733
+        return np.where(inputs>0., inputs, alpha*(np.exp(inputs)-1)) * 1.0507
 
     def bprop(self, inputs, outputs, grads_wrt_outputs):
         """Back propagates gradients through a layer.
@@ -379,9 +380,9 @@ class SELULayer(Layer):
         Given gradients with respect to the outputs of the layer calculates the
         gradients with respect to the layer inputs.
         """
-        gradients = inputs #remove and replace with your code
-        return gradients
-
+        alpha=1.6733
+        return np.where(inputs>0., 1, alpha*np.exp(inputs))  * 1.0507 * grads_wrt_outputs
+                
     def __repr__(self):
         return 'SELULayer'
 
