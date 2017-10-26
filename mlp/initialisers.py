@@ -65,10 +65,26 @@ class NormalInit(object):
         return self.rng.normal(loc=self.mean, scale=self.std, size=shape)
 
 class SELUInit(object):
+
     """SELU Initializer. 
-    Initialising a SELU layer drawing from a Gaussian with mean 0 and variance 1/n out"""
-    # write code that implements SELU initialization. Take inspiration from the other initializers in this file.
-    return self.rng.normal(loc=0, scale=(1/shape[1])**0.5, size=shape)
+    Initialising a SELU layer drawing from a Gaussian with mean 0 and variance 1/n out
+    """
+    def __init__(self, gain=1., rng=None):
+        """Construct a normalised initilisation random initialiser object.
+        Args:
+            gain: Multiplicative factor to scale initialised weights by.
+                Recommended values is 1 for affine layers followed by
+                logistic sigmoid layers (or another affine layer).
+            rng (RandomState): Seeded random number generator.
+        """
+        self.gain = gain
+        if rng is None:
+            rng = np.random.RandomState(DEFAULT_SEED)
+        self.rng = rng
+
+    def __call__(self, shape):
+        std = self.gain * (1. / shape[1])**0.5
+        return self.rng.normal(loc=0., scale=std, size=shape)
 
     
 class GlorotUniformInit(object):
@@ -143,7 +159,7 @@ class GlorotNormalInit(object):
 
 
         
- class Fan_in_UniformInit(object):
+class Fan_in_UniformInit(object):
     """Initialises an two-dimensional uniform parameter array.
     Weights are sampled from a zero-mean uniform distribution with standard
     deviation `sqrt(1 / (input_dim))` where `input_dim` and
@@ -170,7 +186,7 @@ class GlorotNormalInit(object):
         return self.rng.uniform(low=-half_width, high=half_width, size=shape)
 
        
- class Fan_out_UniformInit(object):
+class Fan_out_UniformInit(object):
     """Initialises an two-dimensional uniform parameter array.
     Weights are sampled from a zero-mean uniform distribution with standard
     deviation `sqrt(1 / (output_dim))` where `input_dim` and
