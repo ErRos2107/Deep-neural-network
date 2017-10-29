@@ -83,7 +83,7 @@ class SELUInit(object):
         self.rng = rng
 
     def __call__(self, shape):
-        std = self.gain * (1. / shape[1])**0.5
+        std = self.gain * (1. / shape[0])**0.5
         return self.rng.normal(loc=0., scale=std, size=shape)
 
     
@@ -181,7 +181,7 @@ class Fan_in_UniformInit(object):
     def __call__(self, shape):
         assert len(shape) == 2, (
             'Initialiser should only be used for two dimensional arrays.')
-        std = self.gain * (1. / shape[0])**0.5
+        std = self.gain * (1. / shape[1])**0.5
         half_width = 3.**0.5 * std
         return self.rng.uniform(low=-half_width, high=half_width, size=shape)
 
@@ -208,7 +208,7 @@ class Fan_out_UniformInit(object):
     def __call__(self, shape):
         assert len(shape) == 2, (
             'Initialiser should only be used for two dimensional arrays.')
-        std = self.gain * (1. / shape[1])**0.5
+        std = self.gain * (1. / shape[0])**0.5
         half_width = 3.**0.5 * std
         return self.rng.uniform(low=-half_width, high=half_width, size=shape)
        
